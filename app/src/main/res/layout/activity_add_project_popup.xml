@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/whiteGray"
+    tools:context="com.example.mindaryn.finalproject.IncomePopup">
+
+
+    <LinearLayout
+        android:id="@+id/step3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/setup_title"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="30dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:text="New Project"
+            android:textColor="@color/darkBrown"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView22"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp"
+            android:text="Title"
+            android:textColor="@color/darkBrown" />
+
+        <EditText
+            android:id="@+id/newProjectName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_white"
+            android:ems="10"
+            android:hint="Example : My New Phone"
+            android:inputType="textPersonName"
+            android:padding="15dp"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textView23"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp"
+            android:text="Goal"
+            android:textColor="@color/darkBrown" />
+
+        <EditText
+            android:id="@+id/newProjectGoal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_white"
+            android:ems="10"
+            android:hint="Example : 20000"
+            android:inputType="number"
+            android:padding="15dp"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/createBut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_green"
+            android:text="Create"
+            android:textColor="@color/darkBrown"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+</RelativeLayout>
