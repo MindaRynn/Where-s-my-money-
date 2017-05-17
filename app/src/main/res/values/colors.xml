@@ -8,4 +8,5 @@
     <color name="darkBrown">#502b1c</color>
     <color name="whiteGray">#f1f1f1</color>
     <color name="shadow">#40000000</color>
+    <color name="redPlain">#f29292</color>
 </resources>

@@ -2,6 +2,7 @@ package com.example.mindaryn.finalproject;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,11 +10,21 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class Memo extends AppCompatActivity {
     Button timelineBut, memoBut, settingBut, incomeBut, expenseBut;
+    TextView total, monthly, project, balance;
     RelativeLayout shadow;
     Typeface font;
+    private String devideID;
+    DatabaseReference mRoofRef = FirebaseDatabase.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +32,9 @@ public class Memo extends AppCompatActivity {
         setContentView(R.layout.activity_memo);
 
         font = Typeface.createFromAsset(getAssets(),"fonts/fontawesome-webfont.ttf");
+
+
+        devideID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
         timelineBut = (Button)findViewById(R.id.timelineBut);
         memoBut = (Button)findViewById(R.id.memoBut);
@@ -31,6 +45,11 @@ public class Memo extends AppCompatActivity {
 
         shadow = (RelativeLayout)findViewById(R.id.shadow);
         shadow.setVisibility(View.INVISIBLE);
+
+        total = (TextView)findViewById(R.id.total_in_memo);
+        monthly = (TextView)findViewById(R.id.monthly_in_memo);
+        project = (TextView)findViewById(R.id.project_in_memo);
+        balance = (TextView)findViewById(R.id.balance_in_memo);
 
         timelineBut.setTypeface(font);
         memoBut.setTypeface(font);
@@ -64,6 +83,26 @@ public class Memo extends AppCompatActivity {
                 Intent intent = new Intent(Memo.this,ExpensePopup.class);
                 shadow.setVisibility(View.VISIBLE);
                 startActivity(intent);
+
+            }
+        });
+
+        mRoofRef.child(devideID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int totalMoney = Integer.parseInt(dataSnapshot.child("total_money").getValue().toString());
+                int currentProj = Integer.parseInt(dataSnapshot.child("current_project").getValue().toString());
+                int saving = Integer.parseInt(dataSnapshot.child("monthly_saving").getValue().toString());
+
+                total.setText(totalMoney+"");
+                project.setText(currentProj+"");
+                monthly.setText(saving+"");
+                balance.setText((totalMoney-saving-currentProj)+"");
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });

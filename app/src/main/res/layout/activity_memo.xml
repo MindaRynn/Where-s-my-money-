@@ -72,7 +72,7 @@
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/textView15"
+                        android:id="@+id/total_in_memo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
@@ -102,7 +102,7 @@
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/textView14"
+                        android:id="@+id/monthly_in_memo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
@@ -132,7 +132,7 @@
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/textView13"
+                        android:id="@+id/project_in_memo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
@@ -149,7 +149,7 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/textView12"
+                        android:id="@+id/balance_in_memo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
@@ -216,7 +216,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:layout_weight="1"
-                        android:background="@drawable/left_rounded_softGreen"
+                        android:background="@drawable/left_rounded_softgreen"
                         android:text="Income" />
 
                     <Button

@@ -25,8 +25,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddProjectPopup"
+        <activity
+            android:name=".AddProjectPopup"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity
+            android:name=".DeleteProjectPopup"
             android:theme="@style/AppTheme.CustomTheme"/>
+        <activity
+            android:name=".ManangeProjectPopup"
+            android:theme="@style/AppTheme.CustomTheme" />
     </application>
 
 </manifest>

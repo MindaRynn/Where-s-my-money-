@@ -27,9 +27,5 @@ public class ProjectSingleItem {
 
     public void setName(String newName){ this.name = newName; }
 
-    public void addCurrent(int money){ this.current = (Integer.parseInt(this.current) + money)+""; }
-
-    public void removeCurrent(int money){ this.current = (Integer.parseInt(this.current) - money)+""; }
-
     public void setGoal(String newGoal){ this.goal = newGoal; }
 }

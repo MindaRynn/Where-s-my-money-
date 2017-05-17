@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,8 +14,10 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,13 +31,15 @@ import java.util.Map;
 public class Step1 extends AppCompatActivity {
     private String devideID;
     DatabaseReference mRoofRef = FirebaseDatabase.getInstance().getReference();
+    private FirebaseRecyclerAdapter<FixedCostItem, ShowFixedCostDataViewHolder> mFirebaseAdapter;
 
     Switch monthlySavingSwitch, projectSwitch;
     LinearLayout step1, step2, step3;
     FrameLayout title;
     Button next1, next2, finish, addFixedCostBut;
+    RecyclerView fixedList;
     EditText totalMoneyText, monthlySavingText, projectNameText, projectGoalText, fixedCostText;
-
+    DatabaseReference fixedcostRef;
     private String totalMoney, monthlySaving;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +47,15 @@ public class Step1 extends AppCompatActivity {
         setContentView(R.layout.activity_step1);
 
         devideID = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        fixedcostRef = FirebaseDatabase.getInstance().getReferenceFromUrl("https://finalproject-4c0c6.firebaseio.com/"+devideID+"/fixed_cost");
+        fixedList = (RecyclerView)findViewById(R.id.fixed_list);
+        fixedList.setLayoutManager(new LinearLayoutManager(Step1.this));
         initialView();
 
         mRoofRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if(!snapshot.hasChild(devideID)){
-                    mRoofRef.child(devideID).child("fixed_cost").setValue("0");
                     setUpApp();
                 }else {
                     if(!snapshot.child(devideID).hasChild("set_up")){
@@ -87,6 +95,7 @@ public class Step1 extends AppCompatActivity {
 
     public void goToTimeLine(){
         Intent intent = new Intent(Step1.this,TimeLine.class);
+        finish();
         startActivity(intent);
     }
 
@@ -199,9 +208,27 @@ public class Step1 extends AppCompatActivity {
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRoofRef.child(devideID).child("set_up").setValue("1");
-                mRoofRef.child(devideID).child("project").setValue("1");
-                goToTimeLine();
+                if(projectSwitch.isChecked()){
+                    String proName = projectNameText.getText().toString();
+                    String proGoal = projectGoalText.getText().toString();
+                    if(proGoal.matches("")||proGoal.matches("")){
+                        Toast.makeText(Step1.this, "Please fill in your project information", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Map<String, String> data= new HashMap<String, String>();
+                        data.put("name",proName);
+                        data.put("goal",proGoal);
+                        data.put("current","0");
+
+                        mRoofRef.child(devideID)
+                                .child("project")
+                                .push().setValue(data);
+                        mRoofRef.child(devideID).child("set_up").setValue("1");
+                        goToTimeLine();
+                    }
+                } else{
+                    mRoofRef.child(devideID).child("set_up").setValue("1");
+                    goToTimeLine();
+                }
             }
         });
 
@@ -210,6 +237,42 @@ public class Step1 extends AppCompatActivity {
     public void storeStepOne(){
         mRoofRef.child(devideID).child("total_money").setValue(totalMoney);
         mRoofRef.child(devideID).child("monthly_saving").setValue(monthlySaving);
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        Log.d("fix","come in populate");
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<FixedCostItem, ShowFixedCostDataViewHolder>(FixedCostItem.class,
+                R.layout.fixed_cost_card_item, ShowFixedCostDataViewHolder.class, fixedcostRef) {
+            @Override
+            protected void populateViewHolder(ShowFixedCostDataViewHolder viewHolder, FixedCostItem model, final int position) {
+                viewHolder.setCard(model.getName());
+                Log.d("fix","come in populate");
+                viewHolder.itemView.findViewById(R.id.deleteFixed).setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(final View v){
+                        mFirebaseAdapter.getRef(position).removeValue();
+                    }
+                });
+            }
+        };
+        fixedList.setAdapter(mFirebaseAdapter);
+    }
+
+    public static class ShowFixedCostDataViewHolder extends RecyclerView.ViewHolder {
+        private final TextView fixedCost;
+
+        public ShowFixedCostDataViewHolder(final View itemView){
+            super(itemView);
+            fixedCost = (TextView) itemView.findViewById(R.id.fixedCostText);
+
+        }
+
+        private void setCard(String name){
+            fixedCost.setText(name);
+            Log.d("fix","setCard : "+ name);
+        }
     }
 
 
