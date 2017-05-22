@@ -223,10 +223,14 @@ public class Step1 extends AppCompatActivity {
                                 .child("project")
                                 .push().setValue(data);
                         mRoofRef.child(devideID).child("set_up").setValue("1");
+                        mRoofRef.child(devideID).child("current_diary").setValue("0");
+                        mRoofRef.child(devideID).child("current_project").setValue("0");
                         goToTimeLine();
                     }
                 } else{
                     mRoofRef.child(devideID).child("set_up").setValue("1");
+                    mRoofRef.child(devideID).child("current_diary").setValue("0");
+                    mRoofRef.child(devideID).child("current_project").setValue("0");
                     goToTimeLine();
                 }
             }
@@ -242,13 +246,11 @@ public class Step1 extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
-        Log.d("fix","come in populate");
         mFirebaseAdapter = new FirebaseRecyclerAdapter<FixedCostItem, ShowFixedCostDataViewHolder>(FixedCostItem.class,
                 R.layout.fixed_cost_card_item, ShowFixedCostDataViewHolder.class, fixedcostRef) {
             @Override
             protected void populateViewHolder(ShowFixedCostDataViewHolder viewHolder, FixedCostItem model, final int position) {
                 viewHolder.setCard(model.getName());
-                Log.d("fix","come in populate");
                 viewHolder.itemView.findViewById(R.id.deleteFixed).setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(final View v){

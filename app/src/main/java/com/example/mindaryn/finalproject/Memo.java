@@ -20,7 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class Memo extends AppCompatActivity {
     Button timelineBut, memoBut, settingBut, incomeBut, expenseBut;
-    TextView total, monthly, project, balance;
+    TextView total, monthly, project, balance, income, expense;
     RelativeLayout shadow;
     Typeface font;
     private String devideID;
@@ -51,6 +51,9 @@ public class Memo extends AppCompatActivity {
         project = (TextView)findViewById(R.id.project_in_memo);
         balance = (TextView)findViewById(R.id.balance_in_memo);
 
+        income = (TextView)findViewById(R.id.memo_income);
+        expense = (TextView)findViewById(R.id.memo_expense);
+
         timelineBut.setTypeface(font);
         memoBut.setTypeface(font);
         settingBut.setTypeface(font);
@@ -64,6 +67,7 @@ public class Memo extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Memo.this,TimeLine.class);
+                finish();
                 startActivity(intent);
             }
         });
@@ -86,19 +90,32 @@ public class Memo extends AppCompatActivity {
 
             }
         });
-
         mRoofRef.child(devideID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int totalMoney = Integer.parseInt(dataSnapshot.child("total_money").getValue().toString());
                 int currentProj = Integer.parseInt(dataSnapshot.child("current_project").getValue().toString());
                 int saving = Integer.parseInt(dataSnapshot.child("monthly_saving").getValue().toString());
+                int diary = Integer.parseInt(dataSnapshot.child("current_diary").getValue().toString());
 
-                total.setText(totalMoney+"");
+                total.setText((totalMoney-diary)+"");
                 project.setText(currentProj+"");
                 monthly.setText(saving+"");
-                balance.setText((totalMoney-saving-currentProj)+"");
+                balance.setText((totalMoney-diary-saving-currentProj)+"");
 
+                if(dataSnapshot.hasChild("diary")){
+                    int incomeM = 0;
+                    int expenseM = 0;
+                    for (DataSnapshot messageSnapshot: dataSnapshot.child("diary").getChildren()) {
+                        if(messageSnapshot.child("type").getValue().toString().equals("expense")){
+                            expenseM += Integer.parseInt(messageSnapshot.child("price").getValue().toString());
+                        } else {
+                            incomeM += Integer.parseInt(messageSnapshot.child("price").getValue().toString());
+                        }
+                    }
+                    income.setText(incomeM+"");
+                    expense.setText(expenseM+"");
+                }
             }
 
             @Override

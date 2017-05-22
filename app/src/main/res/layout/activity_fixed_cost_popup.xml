@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/whiteGray"
     tools:context="com.example.mindaryn.finalproject.IncomePopup">
 
@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_marginTop="30dp"
@@ -37,6 +37,21 @@
                 android:text="Fixed Cost"
                 android:textColor="@color/darkBrown"
                 android:textSize="16sp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/fixedCostExpenseList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp" />
+
+            <Button
+                android:id="@+id/addPriceFixedCost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/rounded_green"
+                android:text="Add Expense"
+                android:textColor="@color/darkBrown" />
 
         </LinearLayout>
     </ScrollView>

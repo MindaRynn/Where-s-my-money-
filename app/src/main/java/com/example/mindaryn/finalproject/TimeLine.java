@@ -53,6 +53,7 @@ public class TimeLine extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TimeLine.this,Memo.class);
+                finish();
                 startActivity(intent);
             }
         });
@@ -108,16 +109,37 @@ public class TimeLine extends AppCompatActivity {
             }
         });
 
+        mRoofRef.child(devideID).child("diary").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int diaryMoney = 0;
+                for (DataSnapshot messageSnapshot: dataSnapshot.getChildren()) {
+                    if(messageSnapshot.child("type").getValue().toString().equals("expense")){
+                        diaryMoney += Integer.parseInt(messageSnapshot.child("price").getValue().toString());
+                    } else {
+                        diaryMoney -= Integer.parseInt(messageSnapshot.child("price").getValue().toString());
+                    }
+                }
+                mRoofRef.child(devideID).child("current_diary").setValue(diaryMoney+"");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         mRoofRef.child(devideID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int total = Integer.parseInt(dataSnapshot.child("total_money").getValue().toString());
                 int currentProj = Integer.parseInt(dataSnapshot.child("current_project").getValue().toString());
                 int saving = Integer.parseInt(dataSnapshot.child("monthly_saving").getValue().toString());
+                int diary = Integer.parseInt(dataSnapshot.child("current_diary").getValue().toString());
 
-                totalMoney.setText(total+"");
+                totalMoney.setText((total-diary)+"");
                 savingMoney.setText(saving+"");
-                balanceMoney.setText((total-currentProj-saving)+"");
+                balanceMoney.setText((total-diary-currentProj-saving)+"");
             }
 
             @Override

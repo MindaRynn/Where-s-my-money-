@@ -17,11 +17,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class ExpensePopup extends AppCompatActivity {
+    Button addVar, addFixed;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense_popup);
+        addVar = (Button)findViewById(R.id.variableBut);
+        addFixed = (Button)findViewById(R.id.addFixedCostExpenseBut);
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -30,5 +34,23 @@ public class ExpensePopup extends AppCompatActivity {
         int height = dm.heightPixels;
 
         getWindow().setLayout((int)(width*.8),(int)(height*.32));
+
+        addFixed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ExpensePopup.this, FixedCostPopup.class);
+                finish();
+                startActivity(intent);
+            }
+        });
+
+        addVar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ExpensePopup.this, VariableCostPopup.class);
+                finish();
+                startActivity(intent);
+            }
+        });
     }
 }

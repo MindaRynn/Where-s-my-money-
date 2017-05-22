@@ -16,8 +16,13 @@
         <activity
             android:name=".ExpensePopup"
             android:theme="@style/AppTheme.CustomTheme" />
-        <activity android:name=".VariableCostPopup" />
-        <activity android:name=".FixedCostPopup" />
+        <activity
+            android:name=".VariableCostPopup"
+            android:theme="@style/AppTheme.CustomTheme"/>
+        <activity
+            android:name=".FixedCostPopup"
+            android:theme="@style/AppTheme.CustomTheme"/>
+
         <activity android:name=".Step1">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
